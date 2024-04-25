@@ -1,7 +1,7 @@
 <template>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <router-link class="navbar-brand ps-3" to="/admin/dashboard" >Start Bootstrap</router-link>
+        <router-link class="navbar-brand ps-3 " to="/admin/dashboard" >Admin</router-link>
         <!-- Sidebar Toggle-->
         <button
             class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
@@ -50,18 +50,31 @@
                     <li><a class="dropdown-item" href="#!">Settings</a></li>
                     <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    <li><a @click="logout" class="dropdown-item" href="#!">Logout</a></li>
                 </ul>
             </li>
         </ul>
     </nav>
 </template>
 <script>
+import axios from "axios";
+import router from "@/router";
 export default {
     data() {
         return {
             imagePath: "/avatar/avatar.jpg",
         };
     },
+    methods: {
+        async logout() {
+            try {
+                const response = await axios.post("/api/admin/logout");
+                router.push({ name: "login" }); 
+            } catch (error) {
+                console.error("Error logging out:", error);
+            }
+        }
+    }
 };
+
 </script>

@@ -9,11 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::where('parent_id', 0)->with('children')->get();
+        $query = Category::with(['children', 'parent']);
+
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+    
+        $categories = $query->paginate(10);
         $allcategory = Category::all();
-        return response()->json(['data'=> $categories,'all'=> $allcategory]);
+        return response()->json(['data' => $categories, 'all' => $allcategory]);
     }
     public function store(Request $request)
     {
@@ -32,6 +38,39 @@ class CategoryController extends Controller
 
         ]);
         return response()->json(['message' => 'Category created successfully', 'category' => $category], 201);
-    } 
+    }
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:categories,slug,' . $id,
+        ]);
 
+        $category = Category::findOrFail($id);
+
+        $category->update([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'parent_id' => $request->parent_id == 0 ? 0 : $request->parent_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Category updated successfully!',
+            'category' => $category
+        ]);
+    }
+    public function destroy($id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
+        if ($category->delete()) {
+            return response()->json(['message' => 'Category deleted successfully']);
+        } else {
+            return response()->json(['message' => 'Category could not be deleted'], 500);
+        }
+    }
 }

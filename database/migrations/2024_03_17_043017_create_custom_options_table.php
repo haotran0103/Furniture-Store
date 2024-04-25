@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('custom_options', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->string('option_name');
+            $table->string('option_value');
+            $table->decimal('additional_price', 8, 2)->default(0);
             $table->timestamps();
         });
     }

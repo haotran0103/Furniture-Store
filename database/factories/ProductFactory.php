@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Factories;
+
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,14 +17,25 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $productName = $this->faker->unique()->words(3, true); // Tạo tên sản phẩm ngẫu nhiên
         return [
-            'name' => $this->faker->name,
-            'price' => $this->faker->numberBetween(100, 1000),
-            'feature_image' => $this->faker->imageUrl(),
-            'content' => $this->faker->text,
-            'user_id' => $this->faker->numberBetween(1, 10), // Số người dùng có thể thay đổi tùy theo cần
-            'category_id' => $this->faker->numberBetween(1, 5), // Số danh mục có thể thay đổi tùy theo cần
-            'slug' => $this->faker->unique()->slug,
+            'name' => $productName,
+            'slug' => Str::slug($productName),
+            'price' => $this->faker->numberBetween(1000, 100000),
+            'feature_image' => json_encode([
+                $this->faker->imageUrl(),
+                $this->faker->imageUrl(),
+                $this->faker->imageUrl(),
+                $this->faker->imageUrl() // Thêm ảnh giả bằng Faker
+            ]),
+            'content' => $this->faker->paragraph,
+            'quantity' => $this->faker-> numberBetween(10, 1000),
+            'user_id' => function () {
+                return \App\Models\User::inRandomOrder()->first()->id; // Giả sử bạn đã có User
+            },
+            'category_id' => function () {
+                return \App\Models\Category::inRandomOrder()->first()->id; // Giả sử bạn đã có Category
+            }
         ];
     }
 }

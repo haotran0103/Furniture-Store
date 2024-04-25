@@ -24,12 +24,11 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'password' => bcrypt('password'), // Bạn có thể sử dụng bcrypt để mã hóa mật khẩu
             'remember_token' => Str::random(10),
-            'role' => 'user', // hoặc 'admin' tùy theo cần
+            'role' => 'admin', // hoặc 'admin' tùy theo cần
             'fullname' => $this->faker->name,
             'address' => $this->faker->address,
             'phone' => $this->faker->phoneNumber,
@@ -44,5 +43,19 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function rootUser(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'email' => 'root@gmail.com',
+                'password' => Hash::make('12341234'), // Mã hóa mật khẩu
+                'role' => 'admin',
+                'fullname' => 'Trần Quốc Hào',
+                'address' => 'Tự do',
+                'phone' => '0123456789', // Giả sử số điện thoại là 0123456789
+            ];
+        });
     }
 }

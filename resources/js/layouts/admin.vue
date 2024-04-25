@@ -1,5 +1,8 @@
+
 <template>
+    
     <body class="sb-nav-fixed">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <Header />
         <div id="layoutSidenav">
             <theSidebar />

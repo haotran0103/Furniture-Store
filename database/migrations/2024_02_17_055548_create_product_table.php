@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('price');
-            $table->string('feature_image');
-            $table->string('content');
-            $table->string('user_id');
-            $table->string('category_id');
-            $table->string('slug')->unique();
-            $table->timestamps();
-
-        });
+            Schema::create('products', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('price');
+                $table->text('feature_image')->change();
+                $table->string('content');
+                $table->string('quantity');
+                $table->integer('sold');
+                $table->string('user_id');
+                $table->string('category_id');
+                $table->string('slug')->unique();
+                $table->timestamps();
+            });
     }
 
     /**

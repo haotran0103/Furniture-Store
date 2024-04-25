@@ -18,4 +18,15 @@ class Product extends Model
         'category_id',
         'slug',
     ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'product_tags');
+    }
+    public function orders(){
+        return $this->belongsToMany(Order::class);
+    }
 }
