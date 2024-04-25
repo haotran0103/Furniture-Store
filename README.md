@@ -1,6 +1,5 @@
 # Furniture-Store
 
-![Furniture-Store Logo](./path/to/your/logo.png)
 
 Welcome to Furniture-Store! This project is a modern web application for managing a furniture store, built with Laravel and Vue.js.
 
